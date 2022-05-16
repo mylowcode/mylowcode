@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const scenarioNames = fs.readdirSync(join('./src/scenarios')).filter(name => !name.startsWith('.'));
 const { version } = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+const { publicPath } = JSON.parse(fs.readFileSync('./build.json', 'utf8'));
+
 
 module.exports = ({ onGetWebpackConfig }) => {
   onGetWebpackConfig((config) => {
@@ -36,6 +38,7 @@ module.exports = ({ onGetWebpackConfig }) => {
             templateParameters: {
               scenario: name,
               version,
+              publicPath
             },
             template: require.resolve('./public/index.ejs'),
             filename: `${name}.html`,
@@ -49,6 +52,7 @@ module.exports = ({ onGetWebpackConfig }) => {
         {
           inject: false,
           templateParameters: {
+            publicPath
           },
           template: require.resolve('./public/preview.html'),
           filename: 'preview.html',
